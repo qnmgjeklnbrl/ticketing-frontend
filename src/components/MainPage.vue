@@ -1,35 +1,29 @@
 <template>
-  메인페이지 입니다.
-
-  <p> 현재 click : {{click}}</p>
-  <button @click="change()">버튼눌러봐</button>
+    <CarouselComponent></CarouselComponent>
+    <SearchComponent></SearchComponent>
+    <ListComponent></ListComponent>
 </template>
 
 <script>
+import CarouselComponent from "@/components/CarouselComponent.vue"
+import SearchComponent from "@/components/SearchComponent.vue";
+import ListComponent from "@/components/ListComponent.vue";
+
 export default {
   name: 'MainPage',
+  components: {
+    CarouselComponent,
+    SearchComponent,
+    ListComponent
+  },
   data() {
     return {
-      click : 0,
     }
   },
   methods: {
-    change() {
-      this.click++;
-    },
   },
-  components: {
-  }
-}
+};
 </script>
 
 <style scoped>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>

@@ -1,19 +1,24 @@
 <template>
-  <div id="app">
-<!--    <router-link to="/main">MainPage</router-link>-->
-<!--    <router-link to="/login">LoginPage</router-link>-->
+    <HeaderComponent></HeaderComponent>
     <router-view></router-view>
-  </div>
+    <FooterComponent></FooterComponent>
 </template>
 
 <script>
+import HeaderComponent from "@/components/HeaderComponent.vue";
+import FooterComponent from "@/components/FooterComponent.vue";
 
 export default {
   name: 'App',
-  components: {}
+  components: {
+    HeaderComponent,
+    FooterComponent,
+  }
 }
 </script>
 
 <style>
-
+::-webkit-scrollbar {
+  display: none;
+}
 </style>
