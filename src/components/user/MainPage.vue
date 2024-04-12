@@ -5,9 +5,9 @@
 </template>
 
 <script>
-import CarouselComponent from "@/components/CarouselComponent.vue"
-import SearchComponent from "@/components/SearchComponent.vue";
-import ListComponent from "@/components/ListComponent.vue";
+import CarouselComponent from "@/components/user/CarouselComponent.vue"
+import SearchComponent from "@/components/user/SearchComponent.vue";
+import ListComponent from "@/components/user/ListComponent.vue";
 
 export default {
   name: 'MainPage',

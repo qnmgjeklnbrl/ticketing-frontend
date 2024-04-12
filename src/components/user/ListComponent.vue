@@ -6,10 +6,10 @@
             <div class="card shadow-sm">
               <svg class="bd-placeholder-img card-img-top svg-container" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/></svg>
               <div class="card-body">
-                <p class="card-text overflow-hidden">{{ i.info }}</p>
+                <p class="card-text overflow-hidden">{{ i.artist }}</p>
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#reservationModal">예매하기</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" @click="responseSeat()" data-bs-toggle="modal" data-bs-target="#reservationModal">예매하기</button>
                   </div>
                   <small class="text-body-secondary">{{ i.price }}원</small>
                 </div>
@@ -24,34 +24,41 @@
 </template>
 
 <script>
-import ReservationModal from './ReservationModal.vue'; // 모달 컴포넌트 불러오기
+import ReservationModal from './ReservationModal.vue';
+import axios from "axios"; // 모달 컴포넌트 불러오기
 
 export default {
   name: 'ListComponent',
   data() {
     return {
       click: 0,
-      infos: [
-        {
-          info: "이 세계를 강타할 이동우가 돌아왔다!",
-          price: 90000,
-        },
-        {
-          info: "싱글 골퍼 김장군의 똥꼬쑈!",
-          price: 100000,
-        },
-        {
-          info: "이 세계를 강타할 이동우가 돌아왔다!",
-          price: 200000,
-        },
-        {
-          info: "싱글 골퍼 김장군의 똥꼬쑈!",
-          price: 90000,
-        }
-      ]
+      infos: null,
+      seats: null,
     }
   },
+  mounted() {
+    this.fetchData();
+  },
   methods: {
+    fetchData() {
+      axios.get('http://localhost:8081/perform-detail/all/1')
+        .then(response => {
+          this.infos = response.data;
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    },
+    responseSeat() {
+      axios.get('http://localhost:8081/reservation/available/2')
+          .then(response => {
+            this.seats = response.data;
+            console.log(this.seats);
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+          });
+    },
   },
   components: {
     ReservationModal,
