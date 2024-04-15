@@ -15,7 +15,10 @@
               <template v-for="(rowSeats, index) in seatRows" :key="index">
                 <div class="seat-row">
                   <div v-for="s in rowSeats" :key="s.seat.id" class="seat"
-                       :class="{'reserved': !s.available, 'selected': selectedSeat === s }"
+                       :class="{
+                        'reserved': !s.available,
+                        'selected': selectedSeat === s,
+                        'vip' : s.seat.grade === 'VIP' && s.available}"
                        @click="toggleSeat(s)">
                     <span v-if="!s.available" class="reservation-mark"></span>
                     {{ s.seat.name }}
@@ -118,6 +121,11 @@ export default {
   background-color: transparent;
 }
 
+.modal-dialog {
+  width: fit-content;
+  max-width: 100%;
+}
+
 .reservation-mark:before,
 .reservation-mark:after {
   content: '';
@@ -136,5 +144,10 @@ export default {
 .reservation-mark:after {
   transform: rotate(-45deg);
 }
+
+.vip {
+  background-color: #ffc107;
+}
+
 
 </style>

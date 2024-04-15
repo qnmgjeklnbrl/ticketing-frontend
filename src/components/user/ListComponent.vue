@@ -50,7 +50,7 @@ export default {
         });
     },
     responseSeat() {
-      axios.get('http://localhost:8081/reservation/available/2')
+      axios.get('http://localhost:8081/reservation/available/3')
           .then(response => {
             this.seats = response.data;
             console.log(this.seats);
