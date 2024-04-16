@@ -5,11 +5,11 @@
       <div class="dropdown d-inline-block">
         <button @click="getPerfCategories" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                 data-bs-toggle="dropdown" aria-expanded="false">
-          공연 카테고리 선택
+          {{ selectedCategory ? selectedCategory : '공연 카테고리 선택' }}
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <li v-for="(category, index) in categories" :key="index">
-            <a @click="selectCategory(category.performanceId)" class="dropdown-item" href="#">{{ category.name }}</a>
+            <a @click="selectCategory(category)" class="dropdown-item" href="#">{{ category.name }}</a>
           </li>
         </ul>
       </div>
@@ -54,8 +54,8 @@
   <!-- 좌우 버튼 -->
   <div class="row mt-3">
     <div class="col text-center">
-      <button class="btn btn-secondary" @click="clickPrevious">이전</button>
-      <button class="btn btn-secondary" @click="clickNext">다음</button>
+      <button id="prevButton" class="btn btn-secondary" @click="clickPrevious">이전</button>
+      <button id="nextButton" class="btn btn-secondary" @click="clickNext">다음</button>
     </div>
   </div>
 
@@ -75,6 +75,7 @@ export default {
       infos: null,
       seats: null,
       selectedPrice: null, // 선택된 가격 정보 추가
+      selectedCategory: null,
       button: 'next',
       index: 1,
       size: 5,
@@ -122,19 +123,37 @@ export default {
             console.error('Error fetching data:', error);
           });
     },
-    selectCategory(perfId) {
-      this.perfId = perfId;
+    selectCategory(category) {
+      this.perfId = category.performanceId;
+      this.selectedCategory = category.name;
     },
     clickPrevious() {
       this.button = 'previous';
       this.index = this.infos[0].id;
       this.getPerfDetails();
+      this.updateButtons();
+      console.log(this.infos);
+      console.log(this.button);
     },
     clickNext() {
       this.button = 'next';
       this.index = this.infos[this.infos.length - 1].id;
       this.getPerfDetails();
+      this.updateButtons();
     },
+    updateButtons() {
+      if(this.infos == null && this.button === 'next') {
+        document.getElementById('nextButton').disabled = true;
+      } else {
+        document.getElementById('nextButton').disabled = false;
+      }
+
+      if(this.infos == null && this.button == 'previous') {
+        document.getElementById('prevButton').disabled = true;
+      } else {
+        document.getElementById('prevButton').disabled = false;
+      }
+    }
   },
   components: {
     ReservationModal,
