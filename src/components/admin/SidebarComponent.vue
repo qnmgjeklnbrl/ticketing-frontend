@@ -8,13 +8,13 @@
     <!-- 사이드바 메뉴 리스트 -->
     <ul class="list-unstyled components">
       <li class="active" @click="handleClick('PerformanceManagementComponent')">
-        <a href="#" >공연 관리</a>
+        <a href="#" >공연 등록</a>
       </li>
-      <li>
-        <a href="#">좌석 관리</a>
+      <li class="active" @click="handleClick('SeatManagementComponent')">
+        <a href="#">좌석 등록</a>
       </li>
-      <li>
-        <a href="#" >예약 관리</a>
+      <li class="active" @click="handleClick('ReservationManagementComponent')">
+        <a href="#" >예약 현황</a>
       </li>
       <li>
         <a href="#">쿠폰 관리</a>
