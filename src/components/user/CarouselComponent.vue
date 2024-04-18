@@ -15,7 +15,7 @@
         <div class="carousel-caption d-none d-md-block">
           <h5>{{ coupon.name }}</h5>
           <p>남은 수량: {{ coupon.quantity }}</p>
-          <button @click="redeemCoupon(coupon)" class="btn btn-dark">쿠폰 받기</button>
+          <button @click="saveCoupon(coupon.couponId)" class="btn btn-dark">쿠폰 받기</button>
         </div>
       </div>
     </div>
@@ -34,6 +34,8 @@
 
 <script>
 import axios from "axios";
+import store from "@/store/store";
+import {computed} from "vue";
 
 export default {
   name: 'CarouselComponent',
@@ -45,16 +47,38 @@ export default {
   mounted() {
     this.getMyCoupons();
   },
+  setup() {
+    const member = computed(() => store.state.member);
+    return {
+      member
+    }
+  },
   methods: {
     getMyCoupons() {
       axios.get('http://localhost:8081/coupon/all')
           .then(response => {
             this.coupons = response.data;
+            console.log(this.coupons);
           })
           .catch(error => {
             console.error('Error fetching data:', error);
           });
     },
+    saveCoupon(couponId) {
+      axios.post('http://localhost:8081/member-coupon/save', {
+        memberId : this.member.memberId,
+        couponId : couponId
+      })
+          .then(response => {
+            this.coupons = response.data;
+            alert("발급 성공");
+            this.getMyCoupons();
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+            alert("발급 실패");
+          });
+    }
   },
 };
 </script>

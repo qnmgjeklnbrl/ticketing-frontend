@@ -1,5 +1,5 @@
 <template>
-<div class="container mt-5">
+  <div class="container mt-5">
     <div class="row justify-content-center">
       <div class="col-md-6">
         <div class="card">
@@ -7,27 +7,24 @@
             <h3 class="text-center">회원가입</h3>
           </div>
           <div class="card-body">
-            <form>
-              <div class="form-group mb-3">
-                <label for="username">사용자명</label>
-                <input type="text" class="form-control" id="username" placeholder="사용자명을 입력하세요">
-              </div>
-              <div class="form-group mb-3">
-                <label for="email">이메일 주소</label>
-                <input type="email" class="form-control" id="email" placeholder="이메일 주소를 입력하세요">
-              </div>
-              <div class="form-group mb-3">
-                <label for="password">비밀번호</label>
-                <input type="password" class="form-control" id="password" placeholder="비밀번호를 입력하세요">
-              </div>
-              <div class="form-group mb-3">
-                <label for="confirm-password">비밀번호 확인</label>
-                <input type="password" class="form-control" id="confirm-password" placeholder="비밀번호를 다시 입력하세요">
-              </div>
-              <div class="form-group">
-                <button type="submit" class="btn btn-dark btn-block">가입하기</button>
-              </div>
-            </form>
+            <div class="form-group mb-3">
+              <label for="username">사용자명</label>
+              <input v-model="signUpDto.name" type="text" class="form-control" id="username"
+                     placeholder="사용자명을 입력하세요">
+            </div>
+            <div class="form-group mb-3">
+              <label for="email">이메일 주소</label>
+              <input v-model="signUpDto.email" type="email" class="form-control" id="email"
+                     placeholder="이메일 주소를 입력하세요">
+            </div>
+            <div class="form-group mb-3">
+              <label for="password">비밀번호</label>
+              <input v-model="signUpDto.password" type="password" class="form-control" id="password"
+                     placeholder="비밀번호를 입력하세요">
+            </div>
+            <div class="form-group">
+              <button @click="signUpRequest" type="submit" class="btn btn-dark btn-block">가입하기</button>
+            </div>
           </div>
         </div>
       </div>
@@ -36,9 +33,32 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
-  name: 'SignupPage'
-  // 여기에 필요한 데이터, 메소드 등을 추가합니다.
+  name: 'SignupPage',
+  data() {
+    return {
+      signUpDto: {
+        name: null,
+        email: null,
+        password: null
+      }
+    }
+  },
+  methods: {
+    signUpRequest() {
+      axios.post('http://localhost:8081/member/signup', this.signUpDto)
+          .then(response => {
+            if (response.status === 200) {
+              alert('회원가입 완료');
+            }
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+          });
+    }
+  }
 }
 </script>
 

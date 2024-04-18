@@ -41,8 +41,8 @@
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="couponDropdown">
                   <!-- 쿠폰 목록 -->
-                  <li v-for="(coupon, index) in coupons" :key="index">
-                    <a class="dropdown-item" href="#" @click="selectCoupon(coupon)">{{ coupon.name }}</a>
+                  <li v-for="(c, index) in coupons" :key="index">
+                    <a class="dropdown-item" href="#" @click="selectCoupon(c)">{{ c.coupon.name }}</a>
                   </li>
                 </ul>
               </div>
@@ -65,6 +65,8 @@
 <script>
 
 import axios from "axios";
+import {computed} from "vue";
+import store from "@/store/store";
 
 export default {
   name: 'ReservationModal',
@@ -75,7 +77,14 @@ export default {
       coupons: null,
       updatePrice: null,
       finalPrice: null,
+      id : 1
     };
+  },
+  setup() {
+    const member = computed(() => store.state.member);
+    return {
+      member
+    }
   },
   props: ['seats', 'price'],
   computed: {
@@ -112,14 +121,15 @@ export default {
         // 성공적으로 예약되면 모달을 닫고, 실패하면 사용자에게 알림을 표시할 수 있습니다.
       }
     },
-    selectCoupon(coupon) {
-      this.selectedCoupon = coupon;
-      this.finalPrice = this.updatePrice * coupon.percent;
+    selectCoupon(c) {
+      this.selectedCoupon = c.coupon;
+      this.finalPrice = this.updatePrice * c.coupon.percent;
     },
     getMyCoupons() {
-      axios.get('http://localhost:8081/coupon/all')
+      axios.get(`http://localhost:8081/member-coupon/all/${this.member.memberId}`)
           .then(response => {
             this.coupons = response.data;
+            console.log(this.coupons);
           })
           .catch(error => {
             console.error('Error fetching data:', error);
