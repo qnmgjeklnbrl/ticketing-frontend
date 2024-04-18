@@ -113,11 +113,18 @@ export default {
     },
     reserveSeat() {
       if (this.selectedSeat && this.selectedSeat.available) {
-        // 좌석 예약 처리 코드
-        console.log("Selected seat:", this.selectedSeat);
-        // 여기서 API 호출을 통해 예약 처리를 수행할 수 있습니다.
-        // API 요청 후 성공/실패 여부에 따라 UI를 업데이트할 수 있습니다.
-        // 성공적으로 예약되면 모달을 닫고, 실패하면 사용자에게 알림을 표시할 수 있습니다.
+        axios.post(`http://localhost:8081/reservation/save`, {
+          memberId : this.member.memberId,
+          seatReservationId : this.selectedSeat.seatReservationId,
+          totalPrice : this.finalPrice
+        })
+          .then(() => {
+            alert("예약 성공");
+          })
+          .catch(error => {
+            alert(error.response.data.message);
+            console.error('Error fetching data:', error);
+          });
       }
     },
     selectCoupon(c) {
