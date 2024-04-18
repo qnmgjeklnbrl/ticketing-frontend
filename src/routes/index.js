@@ -12,6 +12,7 @@ const routes = [
     { path: '/login', component:LoginPage},
     { path: '/signup', component:SignupPage},
     { path: '/mypage', component:MyPage},
+    { path: '/admin', component: AdminPage}
 ]
 
 // 라우터 생성

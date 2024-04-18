@@ -168,7 +168,6 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 .input-group {
   width: 90%;
 }

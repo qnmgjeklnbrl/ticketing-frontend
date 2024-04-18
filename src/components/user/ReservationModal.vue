@@ -63,7 +63,6 @@
 </template>
 
 <script>
-
 import axios from "axios";
 import {computed} from "vue";
 import store from "@/store/store";
@@ -186,7 +185,6 @@ export default {
   width: fit-content;
   max-width: 100%;
 }
-
 .reservation-mark:before,
 .reservation-mark:after {
   content: '';
@@ -213,5 +211,4 @@ export default {
 .dark-gold {
   background-color: #7E6E41; /* 어두운 골드색 배경색 */
 }
-
 </style>
