@@ -2,15 +2,14 @@
   <div class="container">
     <div class="d-flex align-items-center py-4 first">
       <main class="form-signin w-100 m-auto">
-        <form>
           <h1 class="h3 mb-3 fw-normal">로그인 창</h1>
 
           <div class="form-floating">
-            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+            <input v-model="signInDto.email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
             <label for="floatingInput">이메일</label>
           </div>
           <div class="form-floating">
-            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+            <input v-model="signInDto.password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
             <label for="floatingPassword">비밀번호</label>
           </div>
 
@@ -20,17 +19,42 @@
               아이디 비번 기억
             </label>
           </div>
-          <button class="btn btn-dark w-100 py-2" type="submit">로그인</button>
-        </form>
+          <button  class="btn btn-dark w-100 py-2" @click="signInRequest">로그인</button>
       </main>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+import store from "@/store/store";
+
 export default {
-  name: 'LoginPage'
-  // 여기에 필요한 데이터, 메소드 등을 추가합니다.
+  name: 'LoginPage',
+  data() {
+    return {
+      signInDto: {
+        email: null,
+        password: null,
+      },
+    }
+
+  },
+  methods: {
+    signInRequest() {
+      axios.post('http://localhost:8081/member/signin', this.signInDto)
+          .then(response => {
+            if (response.status === 200) {
+              alert("로그인 완료");
+              store.commit('setMember', response.data);
+            }
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+            alert("아이디 혹은 비밀번호가 틀립니다.")
+          });
+    },
+  }
 }
 </script>
 
