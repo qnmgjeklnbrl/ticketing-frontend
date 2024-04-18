@@ -1,5 +1,4 @@
 <template>
-
   <div id="concertCarousel" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-indicators">
       <button type="button" data-bs-target="#concertCarousel" data-bs-slide-to="0" class="active"
@@ -10,27 +9,13 @@
       <button type="button" data-bs-target="#concertCarousel" data-bs-slide-to="2"
               aria-label="Slide 3"></button>
     </div>
-
     <div class="carousel-inner">
-      <div class="carousel-item active">
+      <div v-for="(coupon, index) in coupons" :key="index" class="carousel-item" :class="{ active: index === 0 }">
         <img src="https://via.placeholder.com/800x200" class="d-block w-100" alt="Concert 1">
         <div class="carousel-caption d-none d-md-block">
-          <h5>콘서트 제목 1</h5>
-          <p>콘서트 설명이 여기에 들어갑니다.</p>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <img src="https://via.placeholder.com/800x200" class="d-block w-100" alt="Concert 2">
-        <div class="carousel-caption d-none d-md-block">
-          <h5>콘서트 제목 2</h5>
-          <p>콘서트 설명이 여기에 들어갑니다.</p>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <img src="https://via.placeholder.com/800x200" class="d-block w-100" alt="Concert 3">
-        <div class="carousel-caption d-none d-md-block">
-          <h5>콘서트 제목 3</h5>
-          <p>콘서트 설명이 여기에 들어갑니다.</p>
+          <h5>{{ coupon.name }}</h5>
+          <p>남은 수량: {{ coupon.quantity }}</p>
+          <button @click="saveCoupon(coupon.couponId)" class="btn btn-dark">쿠폰 받기</button>
         </div>
       </div>
     </div>
@@ -46,14 +31,54 @@
 
 
 </template>
-
 <script>
+import axios from "axios";
+import store from "@/store/store";
+import {computed} from "vue";
+
 export default {
   name: 'CarouselComponent',
   data() {
-    return {}
+    return {
+      coupons: null,
+    }
   },
-  methods: {},
+  mounted() {
+    this.getMyCoupons();
+  },
+  setup() {
+    const member = computed(() => store.state.member);
+    return {
+      member
+    }
+  },
+  methods: {
+    getMyCoupons() {
+      axios.get('http://localhost:8081/coupon/all')
+          .then(response => {
+            this.coupons = response.data;
+            console.log(this.coupons);
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+          });
+    },
+    saveCoupon(couponId) {
+      axios.post('http://localhost:8081/member-coupon/save', {
+        memberId : this.member.memberId,
+        couponId : couponId
+      })
+          .then(response => {
+            this.coupons = response.data;
+            alert("발급 성공");
+            this.getMyCoupons();
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+            alert("발급 실패");
+          });
+    }
+  },
 };
 </script>
 

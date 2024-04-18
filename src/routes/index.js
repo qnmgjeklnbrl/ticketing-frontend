@@ -5,11 +5,8 @@ import MainPage from '../components/user/MainPage.vue'
 import LoginPage from '../components/user/LoginPage.vue'
 import SignupPage from "@/components/user/SignupPage.vue";
 import MyPage from "@/components/user/MyPage.vue";
-import AdminPage from "../components/admin/AdminPage.vue"
-
 
 // 라우터 설계
-
 const routes = [
     { path: '/', component:MainPage},
     { path: '/login', component:LoginPage},
