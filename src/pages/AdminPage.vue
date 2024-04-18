@@ -8,10 +8,10 @@
 </template>
 
 <script>
-import SidebarComponent from './SidebarComponent.vue';
-import PerformanceManagementComponent from './PerformanceManagementComponent.vue';
-import SeatManagementComponent from './SeatManagementComponent.vue';
-import ReservationManagementComponent from './ReservationManagementComponent.vue';
+import SidebarComponent from '../components/admin/SidebarComponent.vue';
+import PerformanceManagementComponent from '../components/admin/PerformanceManagementComponent.vue';
+import SeatManagementComponent from '../components/admin/SeatManagementComponent.vue';
+import ReservationManagementComponent from '../components/admin/ReservationManagementComponent.vue';
 
 export default {
   components: {

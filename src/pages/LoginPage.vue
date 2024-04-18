@@ -27,7 +27,7 @@
 
 <script>
 import axios from "axios";
-import store from "@/store/store";
+import store from "@/common/store/store";
 
 export default {
   name: 'LoginPage',

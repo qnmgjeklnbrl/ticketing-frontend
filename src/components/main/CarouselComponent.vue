@@ -33,7 +33,7 @@
 </template>
 <script>
 import axios from "axios";
-import store from "@/store/store";
+import store from "@/common/store/store";
 import {computed} from "vue";
 
 export default {

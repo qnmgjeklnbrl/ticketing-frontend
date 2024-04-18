@@ -4,8 +4,8 @@
 </template>
 
 <script>
-import CarouselComponent from "@/components/user/CarouselComponent.vue"
-import ListComponent from "@/components/user/ListComponent.vue";
+import CarouselComponent from "@/components/main/CarouselComponent.vue"
+import ListComponent from "@/components/main/ListComponent.vue";
 
 export default {
   name: 'MainPage',
