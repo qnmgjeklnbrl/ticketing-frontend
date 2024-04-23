@@ -37,7 +37,7 @@
               <div class="dropdown mb-3">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="couponDropdown"
                         data-bs-toggle="dropdown" aria-expanded="false" @click="getMyCoupons()">
-                  {{ selectedCoupon ? selectedCoupon.name : '쿠폰을 선택해주세요' }} <!-- 선택한 쿠폰 표시 -->
+                  {{ selectedCoupon ? selectedCoupon.coupon.name : '쿠폰을 선택해주세요' }} <!-- 선택한 쿠폰 표시 -->
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="couponDropdown">
                   <!-- 쿠폰 목록 -->
@@ -53,7 +53,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            <button @click="initialModal" type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
             <button type="button" class="btn btn-dark" @click="reserveSeat">예약하기</button>
           </div>
         </div>
@@ -113,15 +113,24 @@ export default {
     },
     reserveSeat() {
       if (this.selectedSeat && this.selectedSeat.available) {
-        // 좌석 예약 처리 코드
-        console.log("Selected seat:", this.selectedSeat);
-        // 여기서 API 호출을 통해 예약 처리를 수행할 수 있습니다.
-        // API 요청 후 성공/실패 여부에 따라 UI를 업데이트할 수 있습니다.
-        // 성공적으로 예약되면 모달을 닫고, 실패하면 사용자에게 알림을 표시할 수 있습니다.
+        axios.post(`http://localhost:8081/reservation/save`, {
+          memberId : this.member.memberId,
+          seatReservationId : this.selectedSeat.seatReservationId,
+          totalPrice : this.finalPrice,
+          memberCouponId : this.selectedCoupon.memberCouponId,
+        })
+          .then(() => {
+            alert("예약 성공");
+            this.selectedCoupon = null;
+          })
+          .catch(error => {
+            alert(error.response.data.message);
+            console.error('Error fetching data:', error);
+          });
       }
     },
     selectCoupon(c) {
-      this.selectedCoupon = c.coupon;
+      this.selectedCoupon = c;
       this.finalPrice = this.updatePrice * c.coupon.percent;
     },
     getMyCoupons() {
@@ -133,6 +142,11 @@ export default {
           .catch(error => {
             console.error('Error fetching data:', error);
           });
+    },
+    initialModal() {
+      this.selectedCoupon = null;
+      this.finalPrice = null;
+      this.updatePrice = null;
     },
   }
 }

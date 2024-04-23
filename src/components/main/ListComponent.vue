@@ -38,7 +38,7 @@
               <p class="card-text overflow-hidden mb-0">{{ i.artist }}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary" @click="getRemainSeats(i.price)"
+                  <button type="button" class="btn btn-sm btn-outline-secondary" @click="getRemainSeats(i.price, i.id)"
                           data-bs-toggle="modal" data-bs-target="#reservationModal">예매하기
                   </button> <!-- 가격 정보를 전달 -->
                 </div>
@@ -77,7 +77,7 @@ export default {
       selectedPrice: null, // 선택된 가격 정보 추가
       selectedCategory: null,
       button: 'next',
-      index: 1,
+      index: 0,
       size: 5,
       perfId: null,
       title: null,
@@ -103,9 +103,9 @@ export default {
             console.error('Error fetching data:', error);
           });
     },
-    getRemainSeats(price) { // 가격 정보를 전달하는 메서드로 수정
+    getRemainSeats(price, id) { // 가격 정보를 전달하는 메서드로 수정
       this.selectedPrice = price; // 가격 정보 설정
-      axios.get('http://localhost:8081/reservation/available/3')
+      axios.get(`http://localhost:8081/reservation/available/${id}`)
           .then(response => {
             this.seats = response.data;
             console.log(this.seats);

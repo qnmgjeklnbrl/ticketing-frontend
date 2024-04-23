@@ -1,13 +1,14 @@
 <template>
   <div id="concertCarousel" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-indicators">
-      <button type="button" data-bs-target="#concertCarousel" data-bs-slide-to="0" class="active"
-              aria-current="true"
-              aria-label="Slide 1"></button>
-      <button type="button" data-bs-target="#concertCarousel" data-bs-slide-to="1"
-              aria-label="Slide 2"></button>
-      <button type="button" data-bs-target="#concertCarousel" data-bs-slide-to="2"
-              aria-label="Slide 3"></button>
+      <button v-for="(coupon, index) in coupons" :key="index"
+              type="button"
+              :data-bs-target="'#concertCarousel'"
+              :data-bs-slide-to="index"
+              :class="{ active: index === 0 }"
+              aria-label="Slide {{ index + 1 }}"
+              :aria-current="index === 0 ? 'true' : null">
+      </button>
     </div>
     <div class="carousel-inner">
       <div v-for="(coupon, index) in coupons" :key="index" class="carousel-item" :class="{ active: index === 0 }">
@@ -65,8 +66,8 @@ export default {
     },
     saveCoupon(couponId) {
       axios.post('http://localhost:8081/member-coupon/save', {
-        memberId : this.member.memberId,
-        couponId : couponId
+        memberId: this.member.memberId,
+        couponId: couponId
       })
           .then(response => {
             this.coupons = response.data;
@@ -75,7 +76,7 @@ export default {
           })
           .catch(error => {
             console.error('Error fetching data:', error);
-            alert("발급 실패");
+            alert(error.response.data.message);
           });
     }
   },

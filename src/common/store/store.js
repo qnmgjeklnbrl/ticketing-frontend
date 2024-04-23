@@ -1,4 +1,5 @@
 import { createStore } from "vuex"
+import createPersistedState from "vuex-persistedstate";
 
 const store = createStore({
     state : {
@@ -13,7 +14,12 @@ const store = createStore({
         getMember(state) {
             return state.member;
         }
-    }
+    },
+    plugins : [
+        createPersistedState({
+            paths: ["member"]
+        })
+    ]
 })
 
 export default store
