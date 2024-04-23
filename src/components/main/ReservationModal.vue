@@ -37,7 +37,7 @@
               <div class="dropdown mb-3">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="couponDropdown"
                         data-bs-toggle="dropdown" aria-expanded="false" @click="getMyCoupons()">
-                  {{ selectedCoupon ? selectedCoupon.name : '쿠폰을 선택해주세요' }} <!-- 선택한 쿠폰 표시 -->
+                  {{ selectedCoupon ? selectedCoupon.coupon.name : '쿠폰을 선택해주세요' }} <!-- 선택한 쿠폰 표시 -->
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="couponDropdown">
                   <!-- 쿠폰 목록 -->
@@ -53,7 +53,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            <button @click="initialModal" type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
             <button type="button" class="btn btn-dark" @click="reserveSeat">예약하기</button>
           </div>
         </div>
@@ -116,10 +116,12 @@ export default {
         axios.post(`http://localhost:8081/reservation/save`, {
           memberId : this.member.memberId,
           seatReservationId : this.selectedSeat.seatReservationId,
-          totalPrice : this.finalPrice
+          totalPrice : this.finalPrice,
+          memberCouponId : this.selectedCoupon.memberCouponId,
         })
           .then(() => {
             alert("예약 성공");
+            this.selectedCoupon = null;
           })
           .catch(error => {
             alert(error.response.data.message);
@@ -128,7 +130,7 @@ export default {
       }
     },
     selectCoupon(c) {
-      this.selectedCoupon = c.coupon;
+      this.selectedCoupon = c;
       this.finalPrice = this.updatePrice * c.coupon.percent;
     },
     getMyCoupons() {
@@ -140,6 +142,11 @@ export default {
           .catch(error => {
             console.error('Error fetching data:', error);
           });
+    },
+    initialModal() {
+      this.selectedCoupon = null;
+      this.finalPrice = null;
+      this.updatePrice = null;
     },
   }
 }
