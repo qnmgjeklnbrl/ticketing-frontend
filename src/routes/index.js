@@ -6,6 +6,8 @@ import LoginPage from '../pages/LoginPage.vue'
 import SignupPage from "@/pages/SignupPage.vue";
 import MyPage from "@/pages/MyPage.vue";
 import AdminPage from "@/pages/AdminPage.vue";
+import AdminLoginPage from "@/pages/AdminLoginPage.vue";
+import AdminSignupPage from "@/pages/AdminSignupPage.vue";
 
 // 라우터 설계
 const routes = [
@@ -13,7 +15,9 @@ const routes = [
     { path: '/login', component:LoginPage},
     { path: '/signup', component:SignupPage},
     { path: '/mypage', component:MyPage},
-    { path: '/admin', component: AdminPage}
+    { path: '/admin', component: AdminPage},
+    { path: '/admin/login', component: AdminLoginPage},
+    { path: '/admin/signup', component: AdminSignupPage}
 ]
 
 // 라우터 생성

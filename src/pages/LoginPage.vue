@@ -46,6 +46,7 @@ export default {
           .then(response => {
             if (response.status === 200) {
               alert("로그인 완료");
+              console.log(response.data);
               store.commit('setMember', response.data);
             }
           })

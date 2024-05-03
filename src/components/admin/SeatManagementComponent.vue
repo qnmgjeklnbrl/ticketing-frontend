@@ -1,17 +1,17 @@
 <template>
   <div class="container mt-5">
     <div class="row justify-content-center">
-      <div class="col-md-8">
+      <div cass="col-md-8">
         <h3>좌석 등록</h3>
         <hr>
         <form @submit.prevent="registerSeat">
           <div class="mb-3">
             <label for="rowInput" class="form-label">행 수</label>
-            <input type="number" class="form-control" id="rowInput" v-model="row" required>
+            <input type="number" class="form-control mb-2" id="rowInput" v-model="row" required>
           </div>
           <div class="mb-3">
             <label for="colInput" class="form-label">열 수</label>
-            <input type="number" class="form-control" id="colInput" v-model="col" required>
+            <input type="number" class="form-control mb-2" id="colInput" v-model="col" required>
           </div>
           <button type="submit" class="btn btn-outline-secondary">등록</button>
         </form>
