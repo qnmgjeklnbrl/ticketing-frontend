@@ -16,7 +16,7 @@
       <li class="active" @click="handleClick('ReservationManagementComponent')">
         <a href="#" >예약 현황</a>
       </li>
-      <li>
+      <li class="active" @click="handleClick('CouponManagementComponent')">
         <a href="#">쿠폰 관리</a>
       </li>
      

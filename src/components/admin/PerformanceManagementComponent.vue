@@ -65,7 +65,7 @@ export default markRaw({
   },
   methods: {
     fetchCategories() {
-      axios.get('http://localhost:8080/perform/all')
+      axios.get('http://localhost:8081/perform/all')
         .then(response => {
           this.categories = response.data; // 응답 데이터를 categories 배열에 저장
           console.log(this.categories)
@@ -75,7 +75,7 @@ export default markRaw({
         });
     },
     registerPerformanceCategory() {
-      axios.post('http://localhost:8080/perform/save', { name: this.name })
+      axios.post('http://localhost:8081/perform/save', { name: this.name })
         .then(() => {
           alert('성공적으로 카테고리를 등록했습니다.');
           this.fetchCategories(); // 카테고리 리스트를 다시 가져옵니다.
@@ -88,7 +88,7 @@ export default markRaw({
       this.perfbtnmsg = perfname;
     },
     getPerformancedetail(perfid){
-      axios.get(`http://localhost:8080/perform-detail/${perfid}`)
+      axios.get(`http://localhost:8081/perform-detail/${perfid}`)
         .then(response=>{
           this.performanceDetails = response.data;
         })
@@ -98,7 +98,7 @@ export default markRaw({
     },
    registerPerformanceDetail(){
       this.performanceDetailDto.performanceId = this.categories.find(category => category.name === this.perfbtnmsg).performanceId;
-      axios.post(`http://localhost:8080/perform-detail/save`,{
+      axios.post(`http://localhost:8081/perform-detail/save`,{
         performanceId : this.performanceDetailDto.performanceId,
         artist : this.performanceDetailDto.artist,
         startTime : this.performanceDetailDto.startTime,

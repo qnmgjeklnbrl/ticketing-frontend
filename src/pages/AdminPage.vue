@@ -12,13 +12,15 @@ import SidebarComponent from '../components/admin/SidebarComponent.vue';
 import PerformanceManagementComponent from '../components/admin/PerformanceManagementComponent.vue';
 import SeatManagementComponent from '../components/admin/SeatManagementComponent.vue';
 import ReservationManagementComponent from '../components/admin/ReservationManagementComponent.vue';
+import CouponManagementComponent from '../components/admin/CouponManagementComponent.vue';
 
 export default {
   components: {
     SidebarComponent,
     PerformanceManagementComponent,
     SeatManagementComponent,
-    ReservationManagementComponent
+    ReservationManagementComponent,
+    CouponManagementComponent
   },
   data() {
     return {
@@ -35,6 +37,9 @@ export default {
       }
       else if (componentName === 'ReservationManagementComponent') {
         this.currentComponent = ReservationManagementComponent;
+      }
+      else if (componentName === 'CouponManagementComponent') {
+        this.currentComponent = CouponManagementComponent;
       }
       // 다른 컴포넌트에 대한 조건 추가
     }

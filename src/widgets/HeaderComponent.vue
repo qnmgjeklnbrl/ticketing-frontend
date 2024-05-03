@@ -10,6 +10,7 @@
         <li v-if="!member" class="nav-item"><button @click="router().push('/login')" class="nav-link">로그인</button></li>
         <li v-if="!member" class="nav-item"><button @click="router().push('/signup')" class="nav-link">회원가입</button></li>
         <li v-if="member" class="nav-item nav-link">{{member.name}}님 반갑습니다!</li>
+        <li v-if="member&& member.authority === 'ADMIN'" class="nav-item"><button @click="router().push('/admin')" class="nav-link">관리자 페이지</button></li>
         <li class="nav-item"><button @click="router().push('/mypage')" class="nav-link">마이페이지</button></li>
       </ul>
     </header>
