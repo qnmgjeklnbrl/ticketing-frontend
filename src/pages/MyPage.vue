@@ -1,13 +1,40 @@
 <template>
-    <div>
-    mypage
+  <div class="admin-page-container">
+    <SidebarComponent @changeComponent="changeComponent"></SidebarComponent>
+    <div class="main-contents">
+      <component :is="currentComponent"></component>
+    </div>
   </div>
 </template>
 
 <script>
+import SidebarComponent from "@/components/mypage/SidebarComponent.vue";
+import MyCouponsComponent from "@/components/mypage/MyCouponsComponent.vue";
+import MyReservationComponent from "@/components/mypage/MyReservationComponent.vue";
+
+
 export default {
-  name: 'MyPage'
-  // 여기에 필요한 데이터, 메소드 등을 추가합니다.
+  components: {
+    SidebarComponent,
+    MyCouponsComponent,
+    MyReservationComponent,
+  },
+  name: 'MyPage',
+  data() {
+    return {
+      currentComponent: null,
+    }
+  },
+  methods: {
+    changeComponent(componentName) {
+      if (componentName === 'MyCouponsComponent') {
+        this.currentComponent = MyCouponsComponent;
+      }
+      else if (componentName === 'MyReservationComponent') {
+        this.currentComponent = MyReservationComponent;
+      }
+    }
+  }
 }
 </script>
 
