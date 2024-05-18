@@ -28,17 +28,17 @@ jobs:
         args: --acl public-read --delete
       env:
         AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ACCESS_SECRETKEY }}
         AWS_REGION: 'ap-northeast-2'  # 버킷이 위치한 리전
         SOURCE_DIR: './dist'
 
-    - name: Invalidate CloudFront Cache
-      uses: chetan/invalidate-cloudfront-action@v2
-      with:
-        distribution: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
-        paths: '/*'
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_REGION: 'us-east-1'  # CloudFront는 us-east-1 리전에서 관리
+    # - name: Invalidate CloudFront Cache
+    #   uses: chetan/invalidate-cloudfront-action@v2
+    #   with:
+    #     distribution: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+    #     paths: '/*'
+    #   env:
+    #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     AWS_REGION: 'us-east-1'  # CloudFront는 us-east-1 리전에서 관리
