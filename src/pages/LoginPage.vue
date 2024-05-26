@@ -107,6 +107,3 @@ body {
   margin-bottom: 0;
 }
 </style>
-```
-</rewritten_file><|eot_id|>
-</style>

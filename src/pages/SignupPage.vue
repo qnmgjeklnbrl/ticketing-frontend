@@ -20,7 +20,7 @@
             <div class="form-group mb-3">
               <label for="password">비밀번호</label>
               <input v-model="signUpDto.password" type="password" class="form-control" id="password"
-                     placeholder="��밀번호를 입력하세요">
+                     placeholder="비밀번호를 입력하세요">
             </div>
             <div class="form-group">
               <button @click="signUpRequest" type="submit" class="btn btn-dark btn-block">가입하기</button>
@@ -64,5 +64,4 @@ export default {
 
 <style scoped>
 
-</style>
 </style>

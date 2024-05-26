@@ -55,4 +55,3 @@ hr {
   border-top: 1px solid #dee2e6; /* 구분선 색상 변경 */
 }
 </style>
-</style>
