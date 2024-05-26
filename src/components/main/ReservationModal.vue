@@ -113,7 +113,7 @@ export default {
     },
     reserveSeat() {
       if (this.selectedSeat && this.selectedSeat.available) {
-        axios.post(`http://localhost:8081/reservation/save`, {
+        axios.post(`${process.env.API_URL}/reservation/save`, {
           memberId : this.member.memberId,
           seatReservationId : this.selectedSeat.seatReservationId,
           totalPrice : this.finalPrice,
@@ -134,7 +134,7 @@ export default {
       this.finalPrice = this.updatePrice * c.coupon.percent;
     },
     getMyCoupons() {
-      axios.get(`http://localhost:8081/member-coupon/all/${this.member.memberId}`)
+      axios.get(`${process.env.API_URL}/member-coupon/all/${this.member.memberId}`)
           .then(response => {
             this.coupons = response.data;
             console.log(this.coupons);

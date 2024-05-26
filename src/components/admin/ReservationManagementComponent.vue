@@ -110,7 +110,7 @@ export default markRaw({
   },
   methods: {
     fetchCategories() {
-      axios.get('http://localhost:8081/perform/all')
+      axios.get(`${process.env.API_URL}/perform/all`)
         .then(response => {
           this.performances = response.data;
           if (this.selectedCategoryName) {
@@ -139,7 +139,7 @@ export default markRaw({
     },
    async fetchPerformances() {
     try{
-      const response = await axios.post(`http://localhost:8081/perform-detail/all`, this.perfSearchDto, {
+      const response = await axios.post(`${process.env.API_URL}/perform-detail/all`, this.perfSearchDto, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -161,7 +161,7 @@ export default markRaw({
     },
     fetchSeatReservation(performanceDetailId){
         
-        axios.get(`http://localhost:8081/reservation/all/${performanceDetailId}`)
+        axios.get(`${process.env.API_URL}/reservation/all/${performanceDetailId}`)
         .then(response => {
           this.seatReservation = response.data;
        
@@ -172,7 +172,7 @@ export default markRaw({
     },
     fetchMemberSeatReservation(seatReservationId){
        
-        axios.get(`http://localhost:8081/reservation/by-seat/${seatReservationId}`)
+        axios.get(`${process.env.API_URL}/reservation/by-seat/${seatReservationId}`)
         .then(response => {
           this.memberSeatReservation = response.data;
        
@@ -216,7 +216,7 @@ export default markRaw({
     },
     async fetchFirstAndLastIdx(){
       try {
-        const response = await axios.get(`http://localhost:8081/perform-detail/get-idxinfo/${this.perfSearchDto.perfId}`)
+        const response = await axios.get(`${process.env.API_URL}/perform-detail/get-idxinfo/${this.perfSearchDto.perfId}`)
         this.idxInfo = response.data;
         console.log(this.idxInfo);
         this.fetchPerformances();
@@ -237,7 +237,7 @@ export default markRaw({
   display: inline-block;
   width: 30px;
   height: 30px;
-  border: 1px solid black; /* 테두리 추가 */
+  border: 1px solid black; /* 테두 추가 */
   text-align: center;
   line-height: 30px; /* 세로 중앙 정렬 */
 }

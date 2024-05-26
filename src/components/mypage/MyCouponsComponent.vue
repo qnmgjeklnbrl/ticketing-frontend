@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     getMyCoupons() {
-      axios.get(`http://localhost:8081/member-coupon/all/${this.member.memberId}`)
+      axios.get(`${process.env.API_URL}/member-coupon/all/${this.member.memberId}`)
           .then(response => {
             this.coupons = response.data;
             console.log(this.coupons);

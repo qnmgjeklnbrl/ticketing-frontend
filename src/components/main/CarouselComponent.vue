@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     getMyCoupons() {
-      axios.get('http://localhost:8081/coupon/all')
+      axios.get(`${process.env.API_URL}/coupon/all`)
           .then(response => {
             this.coupons = response.data;
             console.log(this.coupons);
@@ -65,7 +65,7 @@ export default {
           });
     },
     saveCoupon(couponId) {
-      axios.post('http://localhost:8081/member-coupon/save', {
+      axios.post(`${process.env.API_URL}/member-coupon/save`, {
         memberId: this.member.memberId,
         couponId: couponId
       })

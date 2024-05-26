@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     registerCoupon() {
-      axios.post('http://localhost:8081/coupon/save', {
+      axios.post(`${process.env.API_URL}/coupon/save`, {
         name: this.coupon.name,
         percent : this.coupon.percent/100,
         quantity: this.coupon.quantity,
@@ -62,7 +62,7 @@ export default {
       });
     },
     fetchCoupons() {
-      axios.get('http://localhost:8081/coupon/all')
+      axios.get(`${process.env.API_URL}/coupon/all`)
       .then(response => {
         this.coupons = response.data;
       })

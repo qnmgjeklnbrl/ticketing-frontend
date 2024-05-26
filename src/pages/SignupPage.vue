@@ -20,7 +20,7 @@
             <div class="form-group mb-3">
               <label for="password">비밀번호</label>
               <input v-model="signUpDto.password" type="password" class="form-control" id="password"
-                     placeholder="비밀번호를 입력하세요">
+                     placeholder="��밀번호를 입력하세요">
             </div>
             <div class="form-group">
               <button @click="signUpRequest" type="submit" class="btn btn-dark btn-block">가입하기</button>
@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     signUpRequest() {
-      axios.post('http://localhost:8081/member/signup', this.signUpDto)
+      axios.post(`${process.env.API_URL}/member/signup`, this.signUpDto)
           .then(response => {
             if (response.status === 200) {
               alert('회원가입 완료');
@@ -64,4 +64,5 @@ export default {
 
 <style scoped>
 
+</style>
 </style>

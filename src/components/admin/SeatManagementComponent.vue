@@ -34,7 +34,7 @@ export default markRaw({
   },
   methods: {
     registerSeat() {
-      axios.post(`http://localhost:8080/seat/all?row=${this.row}&col=${this.col}`)
+      axios.post(`${process.env.API_URL}/seat/all?row=${this.row}&col=${this.col}`)
         .then(() => {
           alert('좌석이 성공적으로 등록되었습니다.');
         })
@@ -54,4 +54,5 @@ h3 {
 hr {
   border-top: 1px solid #dee2e6; /* 구분선 색상 변경 */
 }
+</style>
 </style>

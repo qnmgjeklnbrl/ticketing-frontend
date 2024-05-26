@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     signInRequest() {
-      axios.post('http://localhost:8081/member/signin', this.signInDto)
+      axios.post(`${process.env.API_URL}/member/signin`, this.signInDto)
           .then(response => {
             if (response.status === 200) {
               alert("로그인 완료");
@@ -106,4 +106,7 @@ body {
 .form-check-label {
   margin-bottom: 0;
 }
+</style>
+```
+</rewritten_file><|eot_id|>
 </style>

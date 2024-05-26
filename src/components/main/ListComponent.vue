@@ -88,7 +88,7 @@ export default {
   },
   methods: {
     getPerfDetails() {
-      axios.post('http://localhost:8081/perform-detail/all', {
+      axios.post(`${process.env.API_URL}/perform-detail/all`, {
         button: this.button,
         index: this.index,
         size: this.size,
@@ -105,7 +105,7 @@ export default {
     },
     getRemainSeats(price, id) { // 가격 정보를 전달하는 메서드로 수정
       this.selectedPrice = price; // 가격 정보 설정
-      axios.get(`http://localhost:8081/reservation/available/${id}`)
+      axios.get(`${process.env.API_URL}/reservation/available/${id}`)
           .then(response => {
             this.seats = response.data;
             console.log(this.seats);
@@ -115,7 +115,7 @@ export default {
           });
     },
     getPerfCategories() {
-      axios.get('http://localhost:8081/perform/all')
+      axios.get(`${process.env.API_URL}/perform/all`)
           .then(response => {
             this.categories = response.data;
           })

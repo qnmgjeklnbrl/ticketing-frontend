@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     getMyReservations() {
-      axios.get(`http://localhost:8081/reservation/${this.member.memberId}`)
+      axios.get(`${process.env.API_URL}/reservation/${this.member.memberId}`)
           .then(response => {
             this.reservations = response.data;
             console.log(this.reservations);

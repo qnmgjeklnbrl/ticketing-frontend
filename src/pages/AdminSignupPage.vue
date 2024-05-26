@@ -48,7 +48,7 @@
     },
     methods: {
       signUpRequest() {
-        axios.post('http://localhost:8081/member/admin-signup', this.signUpDto)
+        axios.post(`${process.env.API_URL}/member/admin-signup`, this.signUpDto)
             .then(response => {
               if (response.status === 200) {
                 alert('회원가입 완료');
@@ -64,4 +64,5 @@
   
   <style scoped>
   
+  </style>
   </style>
