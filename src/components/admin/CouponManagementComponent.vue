@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     registerCoupon() {
-      axios.post(`${process.env.API_URL}/coupon/save`, {
+      axios.post(`${process.env.VUE_APP_API_URL}/coupon/save`, {
         name: this.coupon.name,
         percent : this.coupon.percent/100,
         quantity: this.coupon.quantity,
@@ -62,7 +62,7 @@ export default {
       });
     },
     fetchCoupons() {
-      axios.get(`${process.env.API_URL}/coupon/all`)
+      axios.get(`${process.env.VUE_APP_API_URL}/coupon/all`)
       .then(response => {
         this.coupons = response.data;
       })

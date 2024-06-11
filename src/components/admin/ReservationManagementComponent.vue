@@ -110,7 +110,7 @@ export default markRaw({
   },
   methods: {
     fetchCategories() {
-      axios.get(`${process.env.API_URL}/perform/all`)
+      axios.get(`${process.env.VUE_APP_API_URL}/perform/all`)
         .then(response => {
           this.performances = response.data;
           if (this.selectedCategoryName) {
@@ -139,7 +139,7 @@ export default markRaw({
     },
    async fetchPerformances() {
     try{
-      const response = await axios.post(`${process.env.API_URL}/perform-detail/all`, this.perfSearchDto, {
+      const response = await axios.post(`${process.env.VUE_APP_API_URL}/perform-detail/all`, this.perfSearchDto, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -161,7 +161,7 @@ export default markRaw({
     },
     fetchSeatReservation(performanceDetailId){
         
-        axios.get(`${process.env.API_URL}/reservation/all/${performanceDetailId}`)
+        axios.get(`${process.env.VUE_APP_API_URL}/reservation/all/${performanceDetailId}`)
         .then(response => {
           this.seatReservation = response.data;
        
@@ -172,7 +172,7 @@ export default markRaw({
     },
     fetchMemberSeatReservation(seatReservationId){
        
-        axios.get(`${process.env.API_URL}/reservation/by-seat/${seatReservationId}`)
+        axios.get(`${process.env.VUE_APP_API_URL}/reservation/by-seat/${seatReservationId}`)
         .then(response => {
           this.memberSeatReservation = response.data;
        
@@ -216,7 +216,7 @@ export default markRaw({
     },
     async fetchFirstAndLastIdx(){
       try {
-        const response = await axios.get(`${process.env.API_URL}/perform-detail/get-idxinfo/${this.perfSearchDto.perfId}`)
+        const response = await axios.get(`${process.env.VUE_APP_API_URL}/perform-detail/get-idxinfo/${this.perfSearchDto.perfId}`)
         this.idxInfo = response.data;
         console.log(this.idxInfo);
         this.fetchPerformances();

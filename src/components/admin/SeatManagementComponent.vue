@@ -34,7 +34,7 @@ export default markRaw({
   },
   methods: {
     registerSeat() {
-      axios.post(`${process.env.API_URL}/seat/all?row=${this.row}&col=${this.col}`)
+      axios.post(`${process.env.VUE_APP_API_URL}/seat/all?row=${this.row}&col=${this.col}`)
         .then(() => {
           alert('좌석이 성공적으로 등록되었습니다.');
         })

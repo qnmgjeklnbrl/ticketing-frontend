@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     signUpRequest() {
-      axios.post(`${process.env.API_URL}/member/signup`, this.signUpDto)
+      axios.post(`${process.env.VUE_APP_API_URL}/member/signup`, this.signUpDto)
           .then(response => {
             if (response.status === 200) {
               alert('회원가입 완료');

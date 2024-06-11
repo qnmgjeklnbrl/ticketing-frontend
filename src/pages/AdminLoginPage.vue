@@ -42,7 +42,7 @@
     },
     methods: {
       signInRequest() {
-        axios.post(`${process.env.API_URL}/member/signin`, this.signInDto)
+        axios.post(`${process.env.VUE_APP_API_URL}/member/signin`, this.signInDto)
             .then(response => {
               if (response.status === 200) {
                 alert("로그인 완료");
