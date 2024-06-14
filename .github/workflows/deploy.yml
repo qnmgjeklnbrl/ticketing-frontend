@@ -19,7 +19,7 @@ jobs:
     - name: Install dependencies
       run: npm install
     - name: Set environment variables
-      run: echo "API_URL=${{ secrets.API_URL }}" > .env
+      run: echo "VUE_APP_API_URL=${{ secrets.API_URL }}" > .env
 
     - name: Build
       run: npm run build
