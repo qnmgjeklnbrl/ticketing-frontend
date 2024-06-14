@@ -2,7 +2,7 @@
   <div class="container mt-5">
     <div class="row justify-content-center">
       <div cass="col-md-8">
-        <h3>좌석 등록</h3>
+        <h3> 좌석 등록 </h3>
         <hr>
         <form @submit.prevent="registerSeat">
           <div class="mb-3">
