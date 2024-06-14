@@ -54,7 +54,7 @@
           </div>
           <div class="modal-footer">
             <button @click="initialModal" type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-            <button type="button" class="btn btn-dark" @click="reserveSeat">예약하기</button>
+            <button type="button" class="btn btn-dark" @click="reserveSeat"> 예약하기 </button>
           </div>
         </div>
       </div>
