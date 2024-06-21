@@ -97,7 +97,6 @@ export default {
       })
           .then(response => {
             this.infos = response.data;
-            console.log(this.infos);
           })
           .catch(error => {
             console.error('Error fetching data:', error);
@@ -108,7 +107,6 @@ export default {
       axios.get(`${process.env.VUE_APP_API_URL}/reservation/available/${id}`)
           .then(response => {
             this.seats = response.data;
-            console.log(this.seats);
           })
           .catch(error => {
             console.error('Error fetching data:', error);

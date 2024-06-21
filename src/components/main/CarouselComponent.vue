@@ -58,7 +58,6 @@ export default {
       axios.get(`${process.env.VUE_APP_API_URL}/coupon/all`)
           .then(response => {
             this.coupons = response.data;
-            console.log(this.coupons);
           })
           .catch(error => {
             console.error('Error fetching data:', error);
@@ -75,8 +74,7 @@ export default {
             this.getMyCoupons();
           })
           .catch(error => {
-            console.error('Error fetching data:', error);
-            alert(error.response.data.message);
+            alert(error.response.data.errorMessage);
           });
     }
   },

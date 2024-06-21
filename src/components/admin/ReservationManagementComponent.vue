@@ -146,6 +146,7 @@ export default markRaw({
       });
         
         this.performDetail = response.data;
+        console.log(this.performDetail);
         this.performDetail.sort((a, b) => b.id - a.id );
        
         if(this.performDetail[0].id === this.idxInfo.maxIdx && this.performDetail[this.performDetail.length-1].id === this.idxInfo.minIdx){
@@ -185,7 +186,7 @@ export default markRaw({
     // 이전 페이지 로직
     
       this.perfSearchDto.button = 'previous';
-      this.perfSearchDto.index = this.performDetail[0].id;
+      this.perfSearchDto.index = this.performDetail[0].id ;
       await this.fetchPerformances();
       if(this.performDetail[0].id === this.idxInfo.maxIdx){
         this.isFirstPage = true;
@@ -201,7 +202,7 @@ export default markRaw({
     // 다음 페이지 로직
     
       this.perfSearchDto.button = 'next';
-      this.perfSearchDto.index = this.performDetail[this.performDetail.length-1].id;
+      this.perfSearchDto.index = this.performDetail[this.performDetail.length-1].id ;
       await this.fetchPerformances();
       if(this.performDetail[this.performDetail.length-1].id === this.idxInfo.minIdx){
         this.isLastPage = true;

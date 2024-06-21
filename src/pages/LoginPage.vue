@@ -48,6 +48,7 @@ export default {
               alert("로그인 완료");
               console.log(response.data);
               store.commit('setMember', response.data);
+              this.$router.push('/');
             }
           })
           .catch(error => {
