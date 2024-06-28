@@ -3,13 +3,14 @@
   <div class="row justify-content-center">
     <div class="col-md-2 mt-3 text-end">
       <div class="dropdown d-inline-block">
-        <button @click="getPerfCategories" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                data-bs-toggle="dropdown" aria-expanded="false">
-          {{ selectedCategory ? selectedCategory : '공연 카테고리 선택' }}
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+          {{ selectedCategoryName || '카테고리 선택' }}
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <li v-for="(category, index) in categories" :key="index">
-            <a @click="selectCategory(category)" class="dropdown-item" href="#">{{ category.name }}</a>
+          <li v-for="category in performances" :key="category.id">
+            <a class="dropdown-item" href="#" @click="updateSelectedCategoryName(category.name)">
+              {{ category.name }}
+            </a>
           </li>
         </ul>
       </div>
@@ -26,7 +27,7 @@
   <div class="album py-5">
     <div class="container">
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
-        <div v-for="i in infos" :key="i" class="col">
+        <div v-for="performance in performDetail" :key="performance.id" class="col">
           <div class="card shadow-sm">
             <svg class="bd-placeholder-img card-img-top svg-container" width="100%" height="225"
                  xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
@@ -34,15 +35,15 @@
               <rect width="100%" height="100%" fill="#55595c"/>
             </svg>
             <div class="card-body">
-              <p class="card-text overflow-hidden mb-0"><strong>{{ i.type }}</strong></p> <!-- 줄 구분을 위해 mb-1 클래스 추가 -->
-              <p class="card-text overflow-hidden mb-0">{{ i.artist }}</p>
+              <p class="card-text overflow-hidden mb-0"><strong>{{ performance.type }}</strong></p> <!-- 줄 구분을 위해 mb-1 클래스 추가 -->
+              <p class="card-text overflow-hidden mb-0">{{ performance.artist }}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary" @click="getRemainSeats(i.price, i.id)"
+                  <button type="button" class="btn btn-sm btn-outline-secondary" @click="getRemainSeats(performance.price, performance.id)"
                           data-bs-toggle="modal" data-bs-target="#reservationModal">예매하기
                   </button> <!-- 가격 정보를 전달 -->
                 </div>
-                <small class="text-body-secondary">{{ i.price }}원</small>
+                <small class="text-body-secondary">{{ performance.price }}원</small>
               </div>
             </div>
           </div>
@@ -54,8 +55,8 @@
   <!-- 좌우 버튼 -->
   <div class="row mt-3">
     <div class="col text-center">
-      <button id="prevButton" class="btn btn-secondary" @click="clickPrevious">이전</button>
-      <button id="nextButton" class="btn btn-secondary" @click="clickNext">다음</button>
+      <button id="prevButton" class="btn btn-secondary" @click="clickPrevious()" :disabled="isFirstPage">이전</button>
+      <button id="nextButton" class="btn btn-secondary" @click="clickNext()" :disabled="isLastPage">다음</button>
     </div>
   </div>
 
@@ -70,37 +71,54 @@ export default {
   name: 'ListComponent',
   data() {
     return {
-      categories: null,
+      performances: [],
       click: 0,
-      infos: null,
+      performDetail: [],
       seats: null,
       selectedPrice: null, // 선택된 가격 정보 추가
-      selectedCategory: null,
-      button: 'next',
-      index: null,
-      size: 5,
-      perfId: null,
-      title: null,
+      selectedCategoryName: null,
+      perfSearchDto: {
+        perfId: null,
+        title: null,
+        button: "next",
+        index: null,
+        size: 5,
+      },
+      isFirstPage: true,
+      isLastPage: false,
+      idxInfo: {
+        maxIdx: null,
+        minIdx: null
+      },
     }
   },
   mounted() {
-    this.getPerfDetails();
+    this.fetchCategories();
+    this.fetchFirstAndLastIdx();
   },
   methods: {
-    getPerfDetails() {
-      axios.post(`${process.env.VUE_APP_API_URL}/perform-detail/all`, {
-        button: this.button,
-        index: this.index,
-        size: this.size,
-        perfId: this.perfId,
-        title: this.title
-      })
-          .then(response => {
-            this.infos = response.data;
-          })
-          .catch(error => {
-            console.error('Error fetching data:', error);
-          });
+    async fetchPerformances() {
+      try{
+      const response = await axios.post(`${process.env.VUE_APP_API_URL}/perform-detail/all`, this.perfSearchDto, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+        
+        this.performDetail = response.data;
+        console.log(this.performDetail);
+        this.performDetail.sort((a, b) => b.id - a.id );
+       
+        if(this.performDetail[0].id === this.idxInfo.maxIdx && this.performDetail[this.performDetail.length-1].id === this.idxInfo.minIdx){
+          console.log("1");
+          this.isFirstPage = true;
+          this.isLastPage = true;
+        }
+        
+          
+      }catch(error){
+          console.error('공연 정보 가져오기 실패:', error);
+      }
     },
     getRemainSeats(price, id) { // 가격 정보를 전달하는 메서드로 수정
       this.selectedPrice = price; // 가격 정보 설정
@@ -112,47 +130,76 @@ export default {
             console.error('Error fetching data:', error);
           });
     },
-    getPerfCategories() {
+    fetchCategories() {
       axios.get(`${process.env.VUE_APP_API_URL}/perform/all`)
           .then(response => {
-            this.categories = response.data;
+            this.performances = response.data;
+            if (this.selectedCategoryName) {
+            this.updateSelectedCategoryName(this.selectedCategoryName);
+          }
           })
           .catch(error => {
             console.error('Error fetching data:', error);
           });
     },
+    updateSelectedCategoryName(name) {
+      this.selectedCategoryName = name;
+      this.perfSearchDto.index = null;
+      this.perfSearchDto.button = 'next';
+      this.isFirstPage = true;
+      this.isLastPage = false;
+      
+      const selectedPerformance = this.performances.find(performance => performance.name === name);
+      if (selectedPerformance) {
+        this.perfSearchDto.perfId = selectedPerformance.performanceId;
+        this.fetchPerformances();
+        this.fetchFirstAndLastIdx();
+      } else {
+        console.error('선택된 카테고리에 해당하는 공연이 없습니다.');
+      }
+    },
     selectCategory(category) {
       this.perfId = category.performanceId;
       this.selectedCategory = category.name;
     },
-    clickPrevious() {
-      this.button = 'previous';
-      this.index = this.infos[0].id;
-      this.getPerfDetails();
-      this.updateButtons();
-      console.log(this.infos);
-      console.log(this.button);
-    },
-    clickNext() {
-      this.button = 'next';
-      this.index = this.infos[this.infos.length - 1].id;
-      this.getPerfDetails();
-      this.updateButtons();
-    },
-    updateButtons() {
-      if(this.infos == null && this.button === 'next') {
-        document.getElementById('nextButton').disabled = true;
+    async clickPrevious() {
+      this.perfSearchDto.button = 'previous';
+      this.perfSearchDto.index = this.performDetail[0].id;
+      await this.fetchPerformances();
+      if (this.performDetail[0].id === this.idxInfo.maxIdx) {
+        this.isFirstPage = true;
+        this.isLastPage = false;
       } else {
-        document.getElementById('nextButton').disabled = false;
+        this.isFirstPage = false;
+        this.isLastPage = false;
       }
-
-      if(this.infos == null && this.button == 'previous') {
-        document.getElementById('prevButton').disabled = true;
+    },
+    async clickNext() {
+      this.perfSearchDto.button = 'next';
+      this.perfSearchDto.index = this.performDetail[this.performDetail.length - 1].id;
+      await this.fetchPerformances();
+      if (this.performDetail[this.performDetail.length - 1].id === this.idxInfo.minIdx) {
+        this.isLastPage = true;
+        this.isFirstPage = false;
       } else {
-        document.getElementById('prevButton').disabled = false;
+        this.isFirstPage = false;
+        this.isLastPage = false;
       }
-    }
+    },
+    
+    async fetchFirstAndLastIdx(){
+      try {
+        const response = await axios.get(`${process.env.VUE_APP_API_URL}/perform-detail/get-idxinfo/${this.perfSearchDto.perfId}`)
+        this.idxInfo = response.data;
+        console.log(this.idxInfo);
+        this.fetchPerformances();
+      } catch (error) {
+        console.error('첫 인덱스 가져오기 실:', error);
+      }
+      
+    },
   },
+  
   components: {
     ReservationModal,
   }
