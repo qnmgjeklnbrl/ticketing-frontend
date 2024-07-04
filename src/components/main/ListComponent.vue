@@ -39,14 +39,39 @@
               <p class="card-text overflow-hidden mb-0">{{ performance.artist }}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary" @click="getRemainSeats(performance.price, performance.id)"
-                          data-bs-toggle="modal" data-bs-target="#reservationModal">예매하기
+                  <button type="button" class="btn btn-sm btn-outline-secondary" @click="fetchSeatReservation(performance.id)" >
+                    예매하기
                   </button> <!-- 가격 정보를 전달 -->
                 </div>
                 <small class="text-body-secondary">{{ performance.price }}원</small>
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 모달 창 -->
+  <div class="modal fade" id="reservationModal" tabindex="-1" aria-labelledby="reservationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="reservationModalLabel">좌석 예약 현황</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          좌석을 선택 해주세요
+          <table>
+            <tr v-for="(rowSeats, index) in seatRows" :key="index">
+              <td v-for="seat in rowSeats" :key="seat.id">
+                <span class="seat-name" >
+                  {{ seat.seatName }}
+                  <span v-if="!seat.available" class="reservation-mark" @click="fetchMemberSeatReservation(seat.seatReservationId)" >X</span>
+                </span>
+              </td>
+            </tr>
+          </table>
         </div>
       </div>
     </div>
@@ -60,12 +85,12 @@
     </div>
   </div>
 
-  <reservation-modal :seats="seats" :price="selectedPrice"/> <!-- price prop 추가 -->
 </template>
 
 <script>
-import ReservationModal from './ReservationModal.vue';
-import axios from "axios"; // 모달 컴포넌트 불러오기
+import axios from "axios";
+import 'bootstrap/dist/css/bootstrap.css';
+import { Modal } from 'bootstrap';
 
 export default {
   name: 'ListComponent',
@@ -74,7 +99,7 @@ export default {
       performances: [],
       click: 0,
       performDetail: [],
-      seats: null,
+      seatReservation: [],
       selectedPrice: null, // 선택된 가격 정보 추가
       selectedCategoryName: null,
       perfSearchDto: {
@@ -90,6 +115,19 @@ export default {
         maxIdx: null,
         minIdx: null
       },
+    }
+  },
+  computed: {
+    seatRows() {
+      const rows = {};
+      this.seatReservation.forEach(seat => {
+        const rowChar = seat.seatName.charAt(0);
+        if (!rows[rowChar]) {
+          rows[rowChar] = [];
+        }
+        rows[rowChar].push(seat);
+      });
+      return Object.values(rows);
     }
   },
   mounted() {
@@ -110,7 +148,7 @@ export default {
         this.performDetail.sort((a, b) => b.id - a.id );
        
         if(this.performDetail[0].id === this.idxInfo.maxIdx && this.performDetail[this.performDetail.length-1].id === this.idxInfo.minIdx){
-          console.log("1");
+          
           this.isFirstPage = true;
           this.isLastPage = true;
         }
@@ -120,15 +158,15 @@ export default {
           console.error('공연 정보 가져오기 실패:', error);
       }
     },
-    getRemainSeats(price, id) { // 가격 정보를 전달하는 메서드로 수정
-      this.selectedPrice = price; // 가격 정보 설정
-      axios.get(`${process.env.VUE_APP_API_URL}/reservation/available/${id}`)
-          .then(response => {
-            this.seats = response.data;
-          })
-          .catch(error => {
-            console.error('Error fetching data:', error);
-          });
+    async getRemainSeats(id) { // async 추가
+      try {
+        const response = await axios.get(`${process.env.VUE_APP_API_URL}/reservation/all/${id}`);
+        this.seatReservation = response.data;
+        this.showModal(); // 모달 표시
+        console.log(this.seatReservation);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     },
     fetchCategories() {
       axios.get(`${process.env.VUE_APP_API_URL}/perform/all`)
@@ -198,10 +236,36 @@ export default {
       }
       
     },
+    async fetchSeatReservation(performanceDetailId){
+        
+        try {
+          const response = await axios.get(`${process.env.VUE_APP_API_URL}/reservation/all/${performanceDetailId}`);
+          this.seatReservation = response.data;
+          this.showModal(); // 모달 표시
+        } catch (error) {
+          console.error('좌석 예약 현황 가져오기 실패:', error);
+        }
+    },
+    fetchMemberSeatReservation(seatReservationId){
+       
+        axios.get(`${process.env.VUE_APP_API_URL}/reservation/by-seat/${seatReservationId}`)
+        .then(response => {
+          this.memberSeatReservation = response.data;
+       
+        })
+        .catch(error => {
+          console.error('회원 예약 현황 가져오기 실패:', error);
+        });
+    },
+    showModal() {
+      const modalElement = document.getElementById('reservationModal');
+      const modal = new Modal(modalElement);
+      modal.show();
+    },
   },
   
   components: {
-    ReservationModal,
+    
   }
 };
 </script>
@@ -215,5 +279,27 @@ export default {
 }
 .input-group {
   width: 90%;
+}
+.seat-name {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border: 1px solid black; /* 테두 추가 */
+  text-align: center;
+  line-height: 30px; /* 세로 중앙 정렬 */
+}
+
+.reservation-mark {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  color: red;
+  font-size: 20px;
+}
+.modal-dialog modal-fullscreen {
+  width: fit-content;
+  max-width: 100%;
 }
 </style>

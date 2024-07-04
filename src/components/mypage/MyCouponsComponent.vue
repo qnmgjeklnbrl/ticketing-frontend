@@ -1,12 +1,12 @@
 <template>
   <div class="container">
     <div class="row justify-content-start">
-      <div class="col-md-4 mb-4" v-for="c in coupons" :key="c.coupon.couponId">
+      <div class="col-md-4 mb-4" v-for="c in coupons" :key="c.couponId">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">{{ c.coupon.name }}</h5>
-            <p class="card-text">할인률: {{ c.coupon.percent * 100 }}%</p>
-            <p class="card-text">유효기간: {{ c.coupon.endDate }}</p>
+            <h5 class="card-title">{{ c.name }}</h5>
+            <p class="card-text">할인률: {{ c.percent * 100 }}%</p>
+            <p class="card-text">유효기간: {{ c.endDate }}</p>
           </div>
         </div>
       </div>
@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     getMyCoupons() {
-      axios.get(`${process.env.API_URL}/member-coupon/all/${this.member.memberId}`)
+      axios.get(`${process.env.VUE_APP_API_URL}/member-coupon/all/${this.member.memberId}`)
           .then(response => {
             this.coupons = response.data;
             console.log(this.coupons);

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="row justify-content-startㅎ">
+    <div class="row justify-content-start">
       <div class="col-md-4 mb-4" v-for="reservation in reservations" :key="reservation.id">
         <div class="card">
           <div class="card-body">
@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     getMyReservations() {
-      axios.get(`${process.env.API_URL}/reservation/${this.member.memberId}`)
+      axios.get(`${process.env.VUE_APP_API_URL}/reservation/${this.member.memberId}`)
           .then(response => {
             this.reservations = response.data;
             console.log(this.reservations);
