@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="row justify-content-start">
+    <div v-if="coupons.length > 0" class="row justify-content-start">
       <div class="col-md-4 mb-4" v-for="c in coupons" :key="c.couponId">
         <div class="card">
           <div class="card-body">
@@ -10,6 +10,9 @@
           </div>
         </div>
       </div>
+    </div>
+    <div v-else class="alert alert-info" role="alert">
+      보유하고 있는 쿠폰이 없습니다.
     </div>
   </div>
 </template>
@@ -44,7 +47,7 @@ export default {
             console.log(this.coupons);
           })
           .catch(error => {
-            console.error('Error fetching data:', error);
+            console.error('쿠폰 데이터 가져오기 실패:', error);
           });
     },
   }

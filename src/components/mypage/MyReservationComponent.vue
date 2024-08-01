@@ -1,56 +1,53 @@
 <template>
   <div class="container">
-    <div class="row justify-content-start">
+    <div v-if="reservations.length > 0" class="row justify-content-start">
       <div class="col-md-4 mb-4" v-for="reservation in reservations" :key="reservation.id">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">{{ reservation.seatReservation.performanceDetail.performance.name }}</h5>
-            <p class="card-text">아티스트: {{ reservation.seatReservation.performanceDetail.artist }}</p>
-            <p class="card-text">시작 시간: {{ reservation.seatReservation.performanceDetail.startTime }}</p>
-            <p class="card-text">끝나는 시간: {{ reservation.seatReservation.performanceDetail.endTime }}</p>
-            <p class="card-text">좌석명: {{ reservation.seatReservation.seat.name }}</p>
-            <p class="card-text">좌석등급: {{ reservation.seatReservation.seat.grade }}</p>
-            <p class="card-text">결제금액: {{ reservation.totalPrice }}</p>
+            <p class="card-text">아티스트: {{ reservation.performanceDetail.artist }}</p>
+            <p class="card-text">시작 시간: {{ reservation.performanceDetail.startTime }}</p>
+            <p class="card-text">끝나는 시간: {{ reservation.performanceDetail.endTime }}</p>
+            <p class="card-text">좌석명: {{ reservation.seatName }}</p>
+            <p class="card-text">좌석등급: {{ reservation.grade }}</p>
           </div>
         </div>
       </div>
+    </div>
+    <div v-else class="alert alert-info" role="alert">
+      예약한 공연이 없습니다.
     </div>
   </div>
 </template>
 
 <script>
-import {computed} from "vue";
-import store from "@/common/store/store";
-import axios from "axios";
+import { ref, onMounted } from 'vue';
+import { useStore } from 'vuex';
+import axios from 'axios';
 
 export default {
   name: 'MyReservationComponent',
-  data() {
-    return {
-      reservations: []
-    }
-  },
-  created() {
-    // 컴포넌트가 생성될 때 예약 데이터를 가져오는 메서드 호출
-    this.getMyReservations();
-  },
   setup() {
-    const member = computed(() => store.state.member);
+    const store = useStore();
+    const reservations = ref([]);
+    const member = store.state.member;
+
+    const getMyReservations = async () => {
+      try {
+        const response = await axios.get(`${process.env.VUE_APP_API_URL}/reservation/all/by-member/${member.memberId}`);
+        reservations.value = response.data;
+        console.log(reservations.value);
+      } catch (error) {
+        console.error('예약 정보 가져오기 실패:', error);
+        reservations.value = []; // 에러 발생 시 빈 배열로 설정
+      }
+    };
+
+    onMounted(getMyReservations);
+
     return {
+      reservations,
       member
-    }
-  },
-  methods: {
-    getMyReservations() {
-      axios.get(`${process.env.VUE_APP_API_URL}/reservation/${this.member.memberId}`)
-          .then(response => {
-            this.reservations = response.data;
-            console.log(this.reservations);
-          })
-          .catch(error => {
-            console.error('Error fetching data:', error);
-          });
-    },
+    };
   }
 };
 </script>

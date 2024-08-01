@@ -150,7 +150,7 @@ export default markRaw({
         this.performDetail.sort((a, b) => b.id - a.id );
        
         if(this.performDetail[0].id === this.idxInfo.maxIdx && this.performDetail[this.performDetail.length-1].id === this.idxInfo.minIdx){
-          console.log("1");
+          
           this.isFirstPage = true;
           this.isLastPage = true;
         }
@@ -222,7 +222,7 @@ export default markRaw({
         console.log(this.idxInfo);
         this.fetchPerformances();
       } catch (error) {
-        console.error('첫 인덱스 가져오기 실:', error);
+        console.error('첫 인덱스 가져오기 실패:', error);
       }
       
     },

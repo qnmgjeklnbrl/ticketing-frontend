@@ -52,30 +52,8 @@
     </div>
   </div>
 
-  <!-- 모달 창 -->
-  <div class="modal fade" id="reservationModal" tabindex="-1" aria-labelledby="reservationModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-fullscreen">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="reservationModalLabel">좌석 예약 현황</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          좌석을 선택 해주세요
-          <table>
-            <tr v-for="(rowSeats, index) in seatRows" :key="index">
-              <td v-for="seat in rowSeats" :key="seat.id">
-                <span class="seat-name" >
-                  {{ seat.seatName }}
-                  <span v-if="!seat.available" class="reservation-mark" @click="fetchMemberSeatReservation(seat.seatReservationId)" >X</span>
-                </span>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- 모달 컴포넌트 -->
+  <ReservationModalComponent :seatRows="seatRows" :price="selectedPrice" @fetch-member-seat-reservation="fetchMemberSeatReservation"  />
 
   <!-- 좌우 버튼 -->
   <div class="row mt-3">
@@ -91,9 +69,13 @@
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.css';
 import { Modal } from 'bootstrap';
+import ReservationModalComponent from './ReservationModalComponent.vue';
 
 export default {
   name: 'ListComponent',
+  components: {
+    ReservationModalComponent
+  },
   data() {
     return {
       performances: [],
@@ -241,6 +223,7 @@ export default {
         try {
           const response = await axios.get(`${process.env.VUE_APP_API_URL}/reservation/all/${performanceDetailId}`);
           this.seatReservation = response.data;
+          this.selectedPrice = this.performDetail.find(performance => performance.id === performanceDetailId).price; // 가격 정보 설정
           this.showModal(); // 모달 표시
         } catch (error) {
           console.error('좌석 예약 현황 가져오기 실패:', error);
@@ -264,9 +247,7 @@ export default {
     },
   },
   
-  components: {
-    
-  }
+  
 };
 </script>
 
@@ -279,27 +260,5 @@ export default {
 }
 .input-group {
   width: 90%;
-}
-.seat-name {
-  position: relative;
-  display: inline-block;
-  width: 30px;
-  height: 30px;
-  border: 1px solid black; /* 테두 추가 */
-  text-align: center;
-  line-height: 30px; /* 세로 중앙 정렬 */
-}
-
-.reservation-mark {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  color: red;
-  font-size: 20px;
-}
-.modal-dialog modal-fullscreen {
-  width: fit-content;
-  max-width: 100%;
 }
 </style>
