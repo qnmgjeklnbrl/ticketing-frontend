@@ -44,7 +44,7 @@
 <script>
 import { computed } from 'vue';
 import { useStore } from 'vuex';
-import axios from 'axios';
+import api from '@/api';
 
 export default {
   name: 'ReservationModalComponent',
@@ -86,14 +86,17 @@ export default {
   },
   methods: {
     fetchCoupons() {
-      axios.get(`${process.env.VUE_APP_API_URL}/member-coupon/all/${this.member.memberId}`)
-        .then(response => {
-          this.coupons = response.data;
-          
-        })
-        .catch(error => {
-          console.error('쿠폰 조회 실패', error);
-        });
+      if (this.member && this.member.memberId) {
+        api.get(`/member-coupon/all/${this.member.memberId}`)
+          .then(response => {
+            this.coupons = response.data;
+          })
+          .catch(error => {
+            console.error('쿠폰 조회 실패', error);
+          });
+      } else {
+        this.coupons = [];
+      }
     },
     fetchMemberSeatReservation(seatReservationId) {
       this.$emit('fetch-member-seat-reservation', seatReservationId);
@@ -116,7 +119,7 @@ export default {
         this.totalPrice = 0;
         return;
       }
-      axios.post(`${process.env.VUE_APP_API_URL}/reservation/price`, {
+      api.post(`/reservation/price`, {
         price: this.price,
         grade: this.selectedSeat.grade,
         couponDiscount: this.selectedCoupon?.percent
@@ -130,12 +133,16 @@ export default {
     },
     saveReserve() {
       
+      if(this.member == null) {
+        alert('로그인후 이용 가능합니다.');
+        return;
+      }
       
       if(this.selectedSeat == null) {
         alert('좌석을 선택해주세요');
         return;
       }
-    axios.post(`${process.env.VUE_APP_API_URL}/reservation/save`, {
+    api.post(`/reservation/save`, {
         memberId: this.member.memberId,
         seatReservationId: this.selectedSeat.seatReservationId,
         memberCouponId: this.selectedCoupon?.memberCouponId,

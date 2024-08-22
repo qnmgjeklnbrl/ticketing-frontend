@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from '@/api';
 import { markRaw } from 'vue';
 
 export default markRaw({
@@ -65,7 +65,7 @@ export default markRaw({
   },
   methods: {
     fetchCategories() {
-      axios.get(`${process.env.VUE_APP_API_URL}/perform/all`)
+      api.get(`/perform/all`)
         .then(response => {
           this.categories = response.data; // 응답 데이터를 categories 배열에 저장
           console.log(this.categories)
@@ -75,7 +75,7 @@ export default markRaw({
         });
     },
     registerPerformanceCategory() {
-      axios.post(`${process.env.VUE_APP_API_URL}/perform/save`, { name: this.name })
+      api.post(`/perform/save`, { name: this.name })
         .then(() => {
           alert('성공적으로 카테고리를 등록했습니다.');
           this.fetchCategories(); // 카테고리 리스트를 다시 가져옵니다.
@@ -88,7 +88,7 @@ export default markRaw({
       this.perfbtnmsg = perfname;
     },
     getPerformancedetail(perfid){
-      axios.get(`${process.env.VUE_APP_API_URL}/perform-detail/${perfid}`)
+      api.get(`/perform-detail/${perfid}`)
         .then(response=>{
           this.performanceDetails = response.data;
         })
@@ -98,7 +98,7 @@ export default markRaw({
     },
    registerPerformanceDetail(){
       this.performanceDetailDto.performanceId = this.categories.find(category => category.name === this.perfbtnmsg).performanceId;
-      axios.post(`${process.env.VUE_APP_API_URL}/perform-detail/save`,{
+      api.post(`/perform-detail/save`,{
         performanceId : this.performanceDetailDto.performanceId,
         artist : this.performanceDetailDto.artist,
         startTime : this.performanceDetailDto.startTime,

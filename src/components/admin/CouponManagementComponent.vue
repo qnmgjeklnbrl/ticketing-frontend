@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from '@/api';
 
 export default {
   data() {
@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     registerCoupon() {
-      axios.post(`${process.env.VUE_APP_API_URL}/coupon/save`, {
+      api.post(`/coupon/save`, {
         name: this.coupon.name,
         percent : this.coupon.percent/100,
         quantity: this.coupon.quantity,
@@ -62,7 +62,7 @@ export default {
       });
     },
     fetchCoupons() {
-      axios.get(`${process.env.VUE_APP_API_URL}/coupon/all`)
+      api.get(`/coupon/all`)
       .then(response => {
         this.coupons = response.data;
       })

@@ -33,6 +33,7 @@ export default {
     },
     logout() {
       store.commit('setMember', null);
+      localStorage.removeItem('jwt'); // JWT 제거
     }
   },
   setup() {

@@ -33,7 +33,8 @@
 
 </template>
 <script>
-import axios from "axios";
+
+import api from "@/api";
 import store from "@/common/store/store";
 import {computed} from "vue";
 
@@ -55,7 +56,7 @@ export default {
   },
   methods: {
     getMyCoupons() {
-      axios.get(`${process.env.VUE_APP_API_URL}/coupon/all`)
+      api.get(`/coupon/all`)
           .then(response => {
             this.coupons = response.data;
           })
@@ -64,7 +65,11 @@ export default {
           });
     },
     saveCoupon(couponId) {
-      axios.post(`${process.env.VUE_APP_API_URL}/member-coupon/save`, {
+      if(this.member == null) {
+        alert('로그인후 발급 가능합니다.');
+        return;
+      }
+      api.post(`/member-coupon/save`, {
         memberId: this.member.memberId,
         couponId: couponId
       })

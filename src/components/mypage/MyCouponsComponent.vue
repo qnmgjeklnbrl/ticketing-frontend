@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import api from "@/api";
 import {computed} from "vue";
 import store from "@/common/store/store";
 
@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     getMyCoupons() {
-      axios.get(`${process.env.VUE_APP_API_URL}/member-coupon/all/${this.member.memberId}`)
+      api.get(`/member-coupon/all/${this.member.memberId}`)
           .then(response => {
             this.coupons = response.data;
             console.log(this.coupons);

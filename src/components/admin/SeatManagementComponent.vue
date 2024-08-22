@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from '@/api';
 import { markRaw } from 'vue';
 
 export default markRaw({
@@ -34,7 +34,7 @@ export default markRaw({
   },
   methods: {
     registerSeat() {
-      axios.post(`${process.env.VUE_APP_API_URL}/seat/all?row=${this.row}&col=${this.col}`)
+      api.post(`/seat/all?row=${this.row}&col=${this.col}`)
         .then(() => {
           alert('좌석이 성공적으로 등록되었습니다.');
         })

@@ -66,7 +66,8 @@
 </template>
 
 <script>
-import axios from "axios";
+
+import api from '@/api';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Modal } from 'bootstrap';
 import ReservationModalComponent from './ReservationModalComponent.vue';
@@ -119,7 +120,7 @@ export default {
   methods: {
     async fetchPerformances() {
       try{
-      const response = await axios.post(`${process.env.VUE_APP_API_URL}/perform-detail/all`, this.perfSearchDto, {
+      const response = await api.post(`/perform-detail/all`, this.perfSearchDto, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -142,7 +143,7 @@ export default {
     },
     async getRemainSeats(id) { // async 추가
       try {
-        const response = await axios.get(`${process.env.VUE_APP_API_URL}/reservation/all/${id}`);
+        const response = await api.get(`/reservation/all/${id}`);
         this.seatReservation = response.data;
         this.showModal(); // 모달 표시
         console.log(this.seatReservation);
@@ -151,7 +152,7 @@ export default {
       }
     },
     fetchCategories() {
-      axios.get(`${process.env.VUE_APP_API_URL}/perform/all`)
+      api.get(`/perform/all`)
           .then(response => {
             this.performances = response.data;
             if (this.selectedCategoryName) {
@@ -209,7 +210,7 @@ export default {
     
     async fetchFirstAndLastIdx(){
       try {
-        const response = await axios.get(`${process.env.VUE_APP_API_URL}/perform-detail/get-idxinfo/${this.perfSearchDto.perfId}`)
+        const response = await api.get(`/perform-detail/get-idxinfo/${this.perfSearchDto.perfId}`)
         this.idxInfo = response.data;
         console.log(this.idxInfo);
         this.fetchPerformances();
@@ -221,7 +222,7 @@ export default {
     async fetchSeatReservation(performanceDetailId){
         
         try {
-          const response = await axios.get(`${process.env.VUE_APP_API_URL}/reservation/all/${performanceDetailId}`);
+          const response = await api.get(`/reservation/all/${performanceDetailId}`);
           this.seatReservation = response.data;
           this.selectedPrice = this.performDetail.find(performance => performance.id === performanceDetailId).price; // 가격 정보 설정
           this.showModal(); // 모달 표시
@@ -231,7 +232,7 @@ export default {
     },
     fetchMemberSeatReservation(seatReservationId){
        
-        axios.get(`${process.env.VUE_APP_API_URL}/reservation/by-seat/${seatReservationId}`)
+        api.get(`/reservation/by-seat/${seatReservationId}`)
         .then(response => {
           this.memberSeatReservation = response.data;
        

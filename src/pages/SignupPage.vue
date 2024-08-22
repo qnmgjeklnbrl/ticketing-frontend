@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import api from "@/api";
 
 export default {
   name: 'SignupPage',
@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     signUpRequest() {
-      axios.post(`${process.env.VUE_APP_API_URL}/member/signup`, this.signUpDto)
+      api.post(`/member/signup`, this.signUpDto)
           .then(response => {
             if (response.status === 200) {
               alert('회원가입 완료');

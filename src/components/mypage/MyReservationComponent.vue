@@ -22,7 +22,7 @@
 <script>
 import { ref, onMounted } from 'vue';
 import { useStore } from 'vuex';
-import axios from 'axios';
+import api from '@/api';
 
 export default {
   name: 'MyReservationComponent',
@@ -33,7 +33,7 @@ export default {
 
     const getMyReservations = async () => {
       try {
-        const response = await axios.get(`${process.env.VUE_APP_API_URL}/reservation/all/by-member/${member.memberId}`);
+        const response = await api.get(`/reservation/all/by-member/${member.memberId}`);
         reservations.value = response.data;
         console.log(reservations.value);
       } catch (error) {

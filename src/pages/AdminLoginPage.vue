@@ -26,7 +26,7 @@
   </template>
   
   <script>
-  import axios from "axios";
+  import api from "@/api";
   import store from "@/common/store/store";
   
   export default {
@@ -42,7 +42,7 @@
     },
     methods: {
       signInRequest() {
-        axios.post(`${process.env.VUE_APP_API_URL}/member/signin`, this.signInDto)
+        api.post(`/member/signin`, this.signInDto)
             .then(response => {
               if (response.status === 200) {
                 alert("로그인 완료");
